@@ -15,4 +15,10 @@ function getLocale(request) {
 export function middleware(request){
     const pathName = request.nextUrl.pathname
     const pathnameIsMissingLocale = locales.every(locale=> !pathName.startsWith(`/${locale}/`) && pathName !== `/${locale}/`)
+
+    if(pathnameIsMissingLocale){
+        const locale = getLocale(request)
+
+        return NextResponse.redirect(new URL(`/${locale}/${pathName}`, request.url))
+    }
 }
